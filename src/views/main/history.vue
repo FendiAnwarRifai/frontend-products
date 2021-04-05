@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="d-flex justify-content-evenly shadow-lg p-3 mb-5 bg-body rounded">
+        <!-- <div class="d-flex justify-content-evenly shadow-lg p-3 mb-5 bg-body rounded">
             <div class="p-2 bd-highlight">
                 <div class="row">
                     <div class="col">
@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <br><br>
 
 <!-- Button trigger modal -->
@@ -66,32 +66,27 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="createProducts" class="row g-3" @submit.prevent="CreateData">
-
-  <!-- <div class="col-12">
-    <label for="code" class="form-label">Kode Barang</label>
-    <input type="text" class="form-control" id="code" placeholder="Masukkan kode barang">
-  </div> -->
+        <form id="createHistory" class="row g-3" @submit.prevent="tambahHistory()">
   <div class="col-12">
     <label for="name" class="form-label">Jenis Transaksi</label><br>
     <div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-  <label class="form-check-label" for="inlineRadio1">Menambah</label>
-</div>
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-  <label class="form-check-label" for="inlineRadio2">Mengurangi</label>
-</div>
+    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" :value="1" v-model="type">
+    <label class="form-check-label" for="inlineRadio1">Menambah</label>
+    </div>
+    <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" :value="0" v-model="type">
+    <label class="form-check-label" for="inlineRadio2">Mengurangi</label>
+    </div>
   </div>
     <div class="col-12">
     <label for="stock_min" class="form-label">Jumlah</label>
     <input type="text" v-model="stock" class="form-control" id="stock" placeholder="Masukkan Jumlah">
-  </div>
+    </div>
 </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" form="createProducts" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+        <button type="submit" form="createHistory" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
       </div>
     </div>
   </div>
@@ -113,7 +108,7 @@
     <tr v-for="data in detailProducts.result" :key="data.id">
       <td scope="row">{{i++}}</td>
       <td>{{data.createdAt}}</td>
-      <td>{{ data.type == 0 ? 'Mengurangi' : 'Menambah' }}</td>
+      <td>{{ data.type == '0' ? 'Mengurangi' : 'Menambah' }}</td>
       <td>{{data.amount}}</td>
     </tr>
   </tbody>
@@ -124,15 +119,49 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 export default {
+  data () {
+    return {
+      products: {},
+      type: '',
+      stock: ''
+
+    }
+  },
   mounted: function () {
     this.historyProducts(this.$route.query)
-    // console.log(this.$route.query)
   },
   computed: {
     ...mapGetters(['detailProducts'])
   },
   methods: {
-    ...mapActions(['historyProducts'])
+    ...mapActions(['historyProducts', 'createHistories']),
+    tambahHistory () {
+      const payload = {
+        item_id: this.$route.query.id,
+        type: this.type,
+        stock: this.stock
+      }
+      console.log('tes')
+      this.createHistories(payload).then((res) => {
+        this.historyProducts(this.$route.query)
+        this.$swal.fire({
+          title: 'Success',
+          text: 'Create History successfully',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        })
+        this.type = ''
+        this.stock = ''
+      })
+        .catch((err) => {
+          this.$swal.fire({
+            title: 'Warning',
+            text: `${err.response}`,
+            icon: 'warning',
+            confirmButtonText: 'Ok'
+          })
+        })
+    }
   }
 }
 </script>

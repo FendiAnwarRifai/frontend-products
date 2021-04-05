@@ -146,12 +146,22 @@ export default new Vuex.Store({
       })
     },
     historyProducts (context, payload) {
-      console.log(payload)
       return new Promise((resolve, reject) => {
         axios.get(`${process.env.VUE_APP_BASE_URL}/history?item_id=${payload.id}`)
           .then((result) => {
             context.commit('HISTORY_PRODUCTS', result.data)
             resolve(result.data)
+          })
+          .catch((error) => {
+            reject(error.response)
+          })
+      })
+    },
+    createHistories (context, payload) {
+      return new Promise((resolve, reject) => {
+        axios.post(`${process.env.VUE_APP_BASE_URL}/history/create?item_id=${payload.item_id}`, payload)
+          .then((result) => {
+            resolve(result.data.result)
           })
           .catch((error) => {
             reject(error.response)
