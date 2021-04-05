@@ -41,6 +41,39 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Barang</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editProducts" class="row g-3" @submit.prevent="updateData">
+  <div class="col-12">
+    <input type="hidden" v-model="id_barang">
+    <label for="name" class="form-label">Nama Barang</label>
+    <input type="text" v-model="names" class="form-control" id="name" placeholder="Masukkan nama barang">
+  </div>
+    <div class="col-md-6">
+    <label for="stock_min" class="form-label">Stok Minimal</label>
+    <input type="text" v-model="stock_mins" class="form-control" id="stock_min" placeholder="Contoh:1">
+  </div>
+  <div class="col-md-6">
+    <label for="stock" class="form-label">Stok Awal</label>
+    <input type="text" v-model="stocks" class="form-control" id="stock" placeholder="Contoh:1">
+  </div>
+</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" form="editProducts" class="btn btn-primary" data-bs-dismiss="modal">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
         <table class="table table-striped table-hover">
   <thead>
     <tr>
@@ -65,7 +98,7 @@
       <td>{{data.stock}}</td>
       <td>{{ data.stock_min>data.stock ? 'Dibawah Minimal' : 'Aman' }}</td>
       <td>
-        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#EditModal">
+        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#EditModal" @click="insertEditForm(data)">
           Edit
       </button>
       <router-link to="" class="btn btn-sm btn-secondary">History</router-link>
@@ -85,7 +118,11 @@ export default {
     return {
       name: '',
       stock_min: '',
-      stock: ''
+      stock: '',
+      id_barang: '',
+      names: '',
+      stock_mins: '',
+      stocks: ''
     }
   },
   computed: {
@@ -95,7 +132,7 @@ export default {
     this.getProducts()
   },
   methods: {
-    ...mapActions(['getProducts', 'createProducts', 'deleteProducts']),
+    ...mapActions(['getProducts', 'createProducts', 'deleteProducts', 'updateProducts']),
     CreateData () {
       const payload = {
         name: this.name,
@@ -144,6 +181,38 @@ export default {
           })
         }
       })
+    },
+    insertEditForm (datas) {
+      this.id_barang = datas.id
+      this.names = datas.name
+      this.stock_mins = datas.stock_min
+      this.stocks = datas.stock
+    },
+    updateData () {
+      const payload = {
+        id: this.id_barang,
+        name: this.names,
+        stock_min: this.stock_mins,
+        stock: this.stocks
+      }
+      console.log(payload)
+      this.updateProducts(payload).then((res) => {
+        this.getProducts()
+        this.$swal.fire({
+          title: 'Success',
+          text: 'Update product successfully',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        })
+      })
+        .catch((err) => {
+          this.$swal.fire({
+            title: 'Warning',
+            text: `${err.response}`,
+            icon: 'warning',
+            confirmButtonText: 'Ok'
+          })
+        })
     }
   }
 }

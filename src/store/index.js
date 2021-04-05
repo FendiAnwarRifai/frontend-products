@@ -117,6 +117,17 @@ export default new Vuex.Store({
             reject(error.response)
           })
       })
+    },
+    updateProducts (context, payload) {
+      return new Promise((resolve, reject) => {
+        axios.patch(`${process.env.VUE_APP_BASE_URL}/products/update`, payload)
+          .then((result) => {
+            resolve(result.data.result)
+          })
+          .catch((error) => {
+            reject(error.response)
+          })
+      })
     }
   },
   modules: {
