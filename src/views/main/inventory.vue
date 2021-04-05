@@ -75,7 +75,7 @@
   </div>
 </div>
 
-        <table class="table table-striped table-hover">
+ <table class="table table-striped table-hover">
   <thead>
     <tr>
       <th scope="col">No.</th>
@@ -112,7 +112,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   data () {

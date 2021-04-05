@@ -11,7 +11,8 @@ export default new Vuex.Store({
   state: {
     idUser: null || localStorage.getItem('id'),
     token: null || localStorage.getItem('token'),
-    allProducts: []
+    allProducts: [],
+    historyProducts: {}
   },
   mutations: {
     SET_USER (state, payload) {
@@ -24,6 +25,9 @@ export default new Vuex.Store({
     },
     GET_ALL_PRODUCTS (state, payload) {
       state.allProducts = payload
+    },
+    HISTORY_PRODUCTS (state, payload) {
+      state.historyProducts = payload
     }
   },
   actions: {
@@ -84,6 +88,18 @@ export default new Vuex.Store({
           })
       })
     },
+    register (context, payload) {
+      return new Promise((resolve, reject) => {
+        axios.post(`${process.env.VUE_APP_BASE_URL}/auth/register`, payload)
+          .then(res => {
+            const result = res.data
+            resolve(result)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
     getProducts (context, payload) {
       return new Promise((resolve, reject) => {
         axios.get(`${process.env.VUE_APP_BASE_URL}/products`)
@@ -128,6 +144,19 @@ export default new Vuex.Store({
             reject(error.response)
           })
       })
+    },
+    historyProducts (context, payload) {
+      console.log(payload)
+      return new Promise((resolve, reject) => {
+        axios.get(`${process.env.VUE_APP_BASE_URL}/history?item_id=${payload.id}`)
+          .then((result) => {
+            context.commit('HISTORY_PRODUCTS', result.data)
+            resolve(result.data)
+          })
+          .catch((error) => {
+            reject(error.response)
+          })
+      })
     }
   },
   modules: {
@@ -138,6 +167,9 @@ export default new Vuex.Store({
     },
     allProducts (state) {
       return state.allProducts
+    },
+    detailProducts (state) {
+      return state.historyProducts
     }
   }
 })

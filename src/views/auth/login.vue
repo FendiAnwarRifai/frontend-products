@@ -1,5 +1,6 @@
 <template>
     <div>
+      <H1>Login</H1>
         <div class="container">
 <form autocomplete="off" style="border-radius:28px;" class="shadow-lg p-5 mb-5 bg-white" @submit.prevent="LoginData">
   <div class="mb-3">
@@ -10,6 +11,10 @@
     <label for="password" class="form-label">Password</label>
     <input type="password" v-model="password" class="form-control" id="password">
   </div>
+    <div class="mb-3 form-check">
+    Belum punya akun? <router-link to="/register">Daftar Disini</router-link><br>
+  </div>
+
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 </div>
