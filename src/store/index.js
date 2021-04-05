@@ -95,6 +95,17 @@ export default new Vuex.Store({
             reject(error.response)
           })
       })
+    },
+    createProducts (context, payload) {
+      return new Promise((resolve, reject) => {
+        axios.post(`${process.env.VUE_APP_BASE_URL}/products/create`, payload)
+          .then((result) => {
+            resolve(result.data.result)
+          })
+          .catch((error) => {
+            reject(error.response)
+          })
+      })
     }
   },
   modules: {

@@ -2,7 +2,7 @@
     <div>
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
+  Tambah Product
 </button>
 
 <!-- Modal -->
@@ -22,21 +22,21 @@
   </div> -->
   <div class="col-12">
     <label for="name" class="form-label">Nama Barang</label>
-    <input type="text" class="form-control" id="name" placeholder="Masukkan nama barang">
+    <input type="text" v-model="name" class="form-control" id="name" placeholder="Masukkan nama barang">
   </div>
     <div class="col-md-6">
     <label for="stock_min" class="form-label">Stok Minimal</label>
-    <input type="email" class="form-control" id="stock_min" placeholder="Contoh:1">
+    <input type="text" v-model="stock_min" class="form-control" id="stock_min" placeholder="Contoh:1">
   </div>
   <div class="col-md-6">
     <label for="stock" class="form-label">Stok Awal</label>
-    <input type="password" class="form-control" id="stock" placeholder="Contoh:1">
+    <input type="text" v-model="stock" class="form-control" id="stock" placeholder="Contoh:1">
   </div>
 </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" form="createProducts" class="btn btn-primary">Save</button>
+        <button type="submit" form="createProducts" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
       </div>
     </div>
   </div>
@@ -75,6 +75,13 @@
 // import axios from 'axios'
 import { mapGetters, mapActions } from 'vuex'
 export default {
+  data () {
+    return {
+      name: '',
+      stock_min: '',
+      stock: ''
+    }
+  },
   computed: {
     ...mapGetters(['allProducts'])
   },
@@ -82,14 +89,34 @@ export default {
     this.getProducts()
   },
   methods: {
-    ...mapActions(['getProducts']),
-    CreateData () {
+    ...mapActions(['getProducts', 'createProducts']),
+    CreateData (e) {
       const payload = {
         name: this.name,
         stock_min: this.stock_min,
         stock: this.stock
       }
-      this.createProducts(payload)
+      this.createProducts(payload).then((res) => {
+        this.getProducts()
+        e.target.reset()
+        this.$swal.fire({
+          title: 'Success',
+          text: 'Create product successfully',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        })
+        this.name = ''
+        this.stock_min = ''
+        this.stock = ''
+      })
+        .catch((err) => {
+          this.$swal.fire({
+            title: 'Warning',
+            text: `${err.response}`,
+            icon: 'warning',
+            confirmButtonText: 'Ok'
+          })
+        })
     }
   }
 }
