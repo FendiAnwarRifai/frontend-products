@@ -36,7 +36,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" form="createProducts" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+        <button type="submit" form="createProducts" class="btn btn-primary">Save</button>
       </div>
     </div>
   </div>
@@ -69,7 +69,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" form="editProducts" class="btn btn-primary" data-bs-dismiss="modal">Update</button>
+        <button type="submit" form="editProducts" class="btn btn-primary">Update</button>
       </div>
     </div>
   </div>

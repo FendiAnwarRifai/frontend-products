@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- <div class="d-flex justify-content-evenly shadow-lg p-3 mb-5 bg-body rounded">
+        <div class="d-flex justify-content-evenly shadow-lg p-3 mb-5 bg-body rounded">
             <div class="p-2 bd-highlight">
                 <div class="row">
                     <div class="col">
@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
         <br><br>
 
 <!-- Button trigger modal -->
@@ -86,7 +86,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" form="createHistory" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+        <button type="submit" form="createHistory" class="btn btn-primary">Save</button>
       </div>
     </div>
   </div>
@@ -139,9 +139,9 @@ export default {
       const payload = {
         item_id: this.$route.query.id,
         type: this.type,
-        stock: this.stock
+        amount: this.stock
       }
-      console.log('tes')
+      console.log(payload)
       this.createHistories(payload).then((res) => {
         this.historyProducts(this.$route.query)
         this.$swal.fire({
@@ -149,9 +149,13 @@ export default {
           text: 'Create History successfully',
           icon: 'success',
           confirmButtonText: 'Ok'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.type = ''
+            this.stock = ''
+            this.$router.replace({ path: '/histories', query: { id: this.$route.query.id } })
+          }
         })
-        this.type = ''
-        this.stock = ''
       })
         .catch((err) => {
           this.$swal.fire({
