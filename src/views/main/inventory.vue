@@ -64,7 +64,13 @@
       <td>{{data.stock_min}}</td>
       <td>{{data.stock}}</td>
       <td>{{ data.stock_min>data.stock ? 'Dibawah Minimal' : 'Aman' }}</td>
-      <td></td>
+      <td>
+        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#EditModal">
+          Edit
+      </button>
+      <router-link to="" class="btn btn-sm btn-secondary">History</router-link>
+        <button type="button" class="btn btn-sm btn-danger" @click="deleteFunction({id:data.id})">Delete</button>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -89,8 +95,8 @@ export default {
     this.getProducts()
   },
   methods: {
-    ...mapActions(['getProducts', 'createProducts']),
-    CreateData (e) {
+    ...mapActions(['getProducts', 'createProducts', 'deleteProducts']),
+    CreateData () {
       const payload = {
         name: this.name,
         stock_min: this.stock_min,
@@ -98,7 +104,6 @@ export default {
       }
       this.createProducts(payload).then((res) => {
         this.getProducts()
-        e.target.reset()
         this.$swal.fire({
           title: 'Success',
           text: 'Create product successfully',
@@ -117,6 +122,28 @@ export default {
             confirmButtonText: 'Ok'
           })
         })
+    },
+    deleteFunction (data) {
+      this.$swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.deleteProducts(data).then((res) => {
+            this.getProducts()
+            this.$swal.fire(
+              'Deleted!',
+              'Your file has been deleted.',
+              'success'
+            )
+          })
+        }
+      })
     }
   }
 }

@@ -106,6 +106,17 @@ export default new Vuex.Store({
             reject(error.response)
           })
       })
+    },
+    deleteProducts (context, payload) {
+      return new Promise((resolve, reject) => {
+        axios.delete(`${process.env.VUE_APP_BASE_URL}/products/delete/${payload.id}`)
+          .then((result) => {
+            resolve(result.data.result)
+          })
+          .catch((error) => {
+            reject(error.response)
+          })
+      })
     }
   },
   modules: {
