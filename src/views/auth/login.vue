@@ -40,7 +40,7 @@ export default {
             icon: 'success',
             confirmButtonText: 'Ok'
           })
-          this.$router.push({ path: '/main' })
+          this.$router.push({ path: '/inventory' })
         })
         .catch((err) => {
           this.$swal.fire({
