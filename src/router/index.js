@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../store/index'
 import Inventory from '../views/main/inventory.vue'
+import Histories from '../views/main/history.vue'
 import Login from '../views/auth/login.vue'
 import Register from '../views/auth/register.vue'
 
@@ -25,6 +26,12 @@ const routes = [
     path: '/inventory',
     name: 'inventory',
     component: Inventory,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/histories',
+    name: 'Histories',
+    component: Histories,
     meta: { requiresAuth: true }
   }
 ]

@@ -42,6 +42,7 @@
   </div>
 </div>
 
+<!-- Modal Edit-->
 <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -54,15 +55,15 @@
   <div class="col-12">
     <input type="hidden" v-model="id_barang">
     <label for="name" class="form-label">Nama Barang</label>
-    <input type="text" v-model="names" class="form-control" id="name" placeholder="Masukkan nama barang">
+    <input type="text" v-model="names" class="form-control" id="names" placeholder="Masukkan nama barang">
   </div>
     <div class="col-md-6">
     <label for="stock_min" class="form-label">Stok Minimal</label>
-    <input type="text" v-model="stock_mins" class="form-control" id="stock_min" placeholder="Contoh:1">
+    <input type="text" v-model="stock_mins" class="form-control" id="stock_mins" placeholder="Contoh:1">
   </div>
   <div class="col-md-6">
     <label for="stock" class="form-label">Stok Awal</label>
-    <input type="text" v-model="stocks" class="form-control" id="stock" placeholder="Contoh:1">
+    <input type="text" v-model="stocks" class="form-control" id="stocks" placeholder="Contoh:1">
   </div>
 </form>
       </div>
@@ -101,7 +102,7 @@
         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#EditModal" @click="insertEditForm(data)">
           Edit
       </button>
-      <router-link to="" class="btn btn-sm btn-secondary">History</router-link>
+      <button @click="goHistories(data.id)" class="btn btn-sm btn-secondary">History</button>
         <button type="button" class="btn btn-sm btn-danger" @click="deleteFunction({id:data.id})">Delete</button>
       </td>
     </tr>
@@ -133,6 +134,10 @@ export default {
   },
   methods: {
     ...mapActions(['getProducts', 'createProducts', 'deleteProducts', 'updateProducts']),
+
+    goHistories (ids) {
+      this.$router.push({ path: '/histories', query: { id: ids } })
+    },
     CreateData () {
       const payload = {
         name: this.name,
