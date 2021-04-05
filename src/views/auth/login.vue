@@ -1,29 +1,57 @@
 <template>
     <div>
         <div class="container">
-            <form>
+<form autocomplete="off" style="border-radius:28px;" class="shadow-lg p-5 mb-5 bg-white" @submit.prevent="LoginData">
   <div class="mb-3">
     <label for="username" class="form-label">Username</label>
-    <input type="email" class="form-control" id="username" aria-describedby="emailHelp">
-    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    <input type="text" v-model="username" class="form-control" id="username" aria-describedby="emailHelp">
   </div>
   <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1">
-  </div>
-  <div class="mb-3 form-check">
-    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    <label for="password" class="form-label">Password</label>
+    <input type="password" v-model="password" class="form-control" id="password">
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-        </div>
+</div>
     </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
-
+  data () {
+    return {
+      username: '',
+      password: ''
+    }
+  },
+  methods: {
+    ...mapActions(['login']),
+    LoginData () {
+      const payload = {
+        username: this.username,
+        password: this.password
+      }
+      this.login(payload)
+        .then((res) => {
+          this.$swal.fire({
+            title: 'Success',
+            text: 'Login successfully',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+          })
+          this.$router.push({ path: '/main' })
+        })
+        .catch((err) => {
+          this.$swal.fire({
+            title: 'Warning',
+            text: `${err.response.data.message}`,
+            icon: 'warning',
+            confirmButtonText: 'Ok'
+          })
+        })
+    }
+  }
 }
 </script>
 
