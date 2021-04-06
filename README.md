@@ -37,7 +37,10 @@ npm install
 ```
 3. Add .env.local file at root folder project, and add following
 ```sh
-VUE_APP_BASE_URL = [Backend API]
+VUE_APP_BASE_URL = [Backend API] 
+
+or if using it locally
+VUE_APP_BASE_URL = http://localhost:port/api
 ```
 4. Run the project
 ```
